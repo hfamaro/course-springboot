@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.technos.course.entities.enums.OrderStatus;
+
 @Entity
 @Table(name = "tb_order")
 public class Order {
@@ -21,6 +23,7 @@ public class Order {
 	private Long id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
+	private Integer orderStatus;	
 	
 	@ManyToOne
 	@JoinColumn(name = "client_id")
@@ -30,11 +33,20 @@ public class Order {
 		
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		setOrderStatus(orderStatus);
 		this.client = client;
+	}
+		
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(this.orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus.getCode();
 	}
 
 	public Long getId() {
